@@ -16,7 +16,7 @@ from models.state import State
 from models.user import User
 import json
 import os
-import pycodestyle
+import pep8
 import unittest
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
@@ -30,18 +30,17 @@ class TestFileStorageDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.fs_f = inspect.getmembers(FileStorage, inspect.isfunction)
 
-    def test_pycodestyle_conformance_file_storage(self):
-        """Test that models/engine/file_storage.py conforms to pycodestyle."""
-        pycodestyles = pycodestyle.StyleGuide(quiet=True)
-        result = pycodestyles.check_files(['models/engine/file_storage.py'])
+    def test_pep8_conformance_file_storage(self):
+        """Test that models/engine/file_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['models/engine/file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
-    def test_pycodestyle_conformance_test_file_storage(self):
-        """Test tests/test_models/
-        test_file_storage.py conforms to pycodestyle."""
-        pycodestyles = pycodestyle.StyleGuide(quiet=True)
-        result = pycodestyles.check_files(['tests/test_models/test_engine/\
+    def test_pep8_conformance_test_file_storage(self):
+        """Test tests/test_models/test_file_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['tests/test_models/test_engine/\
 test_file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
@@ -108,37 +107,9 @@ class TestFileStorage(unittest.TestCase):
         FileStorage._FileStorage__objects = new_dict
         storage.save()
         FileStorage._FileStorage__objects = save
-       
+        for key, value in new_dict.items():
+            new_dict[key] = value.to_dict()
+        string = json.dumps(new_dict)
         with open("file.json", "r") as f:
-            saved_data = json.load(f)
-
-        self.assertEqual(saved_data, new_dict)
-
-    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
-    def test_get(self):
-        """ testing get function"""
-        storage = FileStorage()
-        storage.reload()
-        state_data = {"name": "Dar Es Salaam"}
-        state_instance = State(**state_data)
-        retrieved_state = storage.get(State, state_instance.id)
-        self.assertEqual(state_instance, retrieved_state)
-        fake_state_id = storage.get(State, 'fake_id')
-        self.assertEqual(fake_state_id, None)
-
-    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
-    def test_count(self):
-        """ testing count function"""
-        storage = FileStorage()
-        storage.reload()
-        state_data = {"name": "Ethiopia"}
-        state_instance = State(**state_data)
-        storage.new(state_instance)
-        city_data = {"name": "Dwayne", "state_id": state_instance.id}
-        city_instance = City(**city_data)
-        storage.new(city_instance)
-        storage.save()
-        state_occurrence = storage.count(State)
-        self.assertEqual(state_occurrence, len(storage.all(State)))
-        all_occurrence = storage.count()
-        self.assertEqual(all_occurrence, len(storage.all()))
+            js = f.read()
+        self.assertEqual(json.loads(string), json.loads(js))

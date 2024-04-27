@@ -39,7 +39,6 @@ class DBStorage:
                                              HBNB_MYSQL_DB))
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
-        self.reload() # Added this line
 
     def all(self, cls=None):
         """query on the current database session"""
@@ -70,35 +69,23 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
-        self.__session = Session() # double check this line
+        self.__session = Session
 
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
 
     def get(self, cls, id):
-        """
-        Retrieve one object from storage.
-        """
+        '''method to retrieve one object'''
         if cls and id:
-            if cls in classes.value() and isinstance(id, str):
-                all_objects = self.all(cls)
-                for key, value in all_objects.items():
-                    if key.split('.')[1] == id:
-                        return value
-            else:
-                return
-        return
+            tempo = cls, __name__ + "." + id
+            count = self.all(cls)
+            for key in count:
+                if key == tempo:
+                    return count[key]
+        else:
+            return None
 
     def count(self, cls=None):
-        """
-        Count the number of objects in storage.
-        """
-        if not cls:
-            inst_of_all_cls = self.all()
-            return len(inst_of_all_cls)
-        if cls in classes.values():
-            all_inst_of_prov_cls = self.all(cls)
-            return len(all_inst_of_prov_cls)
-        if cls not in classes.values():
-            return
+        '''class (optional)'''
+        return (len(self.all(cls)))
