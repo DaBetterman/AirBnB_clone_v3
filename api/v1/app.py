@@ -24,7 +24,6 @@ def not_found(error):
 
 
 if __name__ == "__main__":
-    """ The main Function """
     the_host = os.getenv('HBNB_API_HOST', '0.0.0.0')
     the_port = int(os.getenv('HBNB_API_PORT', 5000))
     app.run(host=the_host, port=the_port, threaded=True, debug=True)
