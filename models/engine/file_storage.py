@@ -71,9 +71,6 @@ class FileStorage:
     def get(self, cls, id):
         """object to get"""
         if cls and id:
-            #for k, v in classes.items():
-                #if v is cls:
-                    #cls_str = k
             if isinstance(cls, str):
                 cls_str = cls
             else:
