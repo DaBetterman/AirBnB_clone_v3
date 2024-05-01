@@ -25,7 +25,11 @@ def states_id(s_id):
     abort(404)
 
 
-@app_views.route('/states/<string:s_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route(
+        '/states/<string:s_id>',
+        methods=['DELETE'],
+        strict_slashes=False
+        )
 def state_delete(s_id):
     """ deletes a state """
     s = storage.get("State", s_id)
@@ -41,15 +45,19 @@ def post_states():
     """ posting a state """
     req = request.get_json()
     if not req:
-        abort(400, 'Not a JSON')
+        return make_response(jsonify({'error': "Not a JSON"}), 400)
     if 'name' not in req:
-        abort(400, 'Missing name')
+        return make_response(jsonify({'error': "Missing name"}), 400)
     s = State(**req)
     s.save()
     return make_response(jsonify(s.to_dict()), 201)
 
 
-@app_views.route('/states/<string:s_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route(
+        '/states/<string:s_id>',
+        methods=['PUT'],
+        strict_slashes=False
+                 )
 def state_put(s_id):
     """ put to update a state """
     s = storage.get("State", s_id)
