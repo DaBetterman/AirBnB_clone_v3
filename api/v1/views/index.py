@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 """ index file for the project """
-
-
-from . import app_views
-from flask import jsonify
+from api.v1.views import app_views
+from flask import jsonify, Flask, Blueprint
 from models.user import User
 from models.state import State
 from models.city import City
@@ -16,9 +14,7 @@ from models import storage
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def status():
     """ the ok status """
-    ok = {
-            "status": "OK"
-            }
+    ok = {"status": "OK"}
     return jsonify(ok)
 
 
@@ -34,3 +30,7 @@ def stats():
             "users": storage.count(User)
             }
     return jsonify(counts)
+
+
+if __name__ == "__main__":
+    pass
