@@ -71,12 +71,16 @@ class FileStorage:
     def get(self, cls, id):
         """object to get"""
         if cls and id:
-            for k, v in classes.items():
-                if v is cls:
-                    cls_str = k
+            #for k, v in classes.items():
+                #if v is cls:
+                    #cls_str = k
+            if isinstance(cls, str):
+                cls_str = cls
+            else:
+                cls_str = '{}'.format(cls.__name__)
             take_obj = '{}.{}'.format(cls_str, id)
             every_obj = self.all(cls)
-            return every_obj[take_obj]
+            return every_obj.get(take_obj, None)
         else:
             return None
 
