@@ -46,6 +46,8 @@ def post_states():
     req = request.get_json()
     if not req:
         return make_response(jsonify({'error': "Not a JSON"}), 400)
+    if request.headers.get('Content-Type') != 'application/json':
+        abort(400)
     if 'name' not in req:
         return make_response(jsonify({'error': "Missing name"}), 400)
     s = State(**req)

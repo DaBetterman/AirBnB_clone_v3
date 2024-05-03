@@ -8,6 +8,7 @@ import os
 
 
 app = Flask(__name__)
+app.doc = "endpoint (route) will be to return the status of the API"
 app.register_blueprint(app_views)
 
 
