@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""  endpoint (route) will be to return the status of the API """
+"""
+initialize the models package
+"""
 
 from models import storage
 from api.v1.views import app_views
@@ -8,7 +10,6 @@ import os
 
 
 app = Flask(__name__)
-app.doc = "endpoint (route) will be to return the status of the API"
 app.register_blueprint(app_views)
 
 
